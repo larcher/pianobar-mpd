@@ -1,0 +1,1 @@
+-e git://github.com/larcher/python-mpd-server.git#egg=python_mpd_server-master

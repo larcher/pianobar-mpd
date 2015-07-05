@@ -6,11 +6,27 @@ from mpdserver import OptStr,OptInt
 
 PORT = 6605
 FIFO = "/home/larcher/.config/pianobar/ctl"
+NOW_PLAYING = "/home/larcher/.config/pianobar/nowplaying-mpd"
 
 def send_to_pianobar(key):
         with open(FIFO,"w") as pbctl:
             pbctl.write("\n" + key + "\n")
             pbctl.flush()
+
+def get_current_song():
+    '''
+    Read the NOW_PLAYING file updated by pianobard, 
+    parse it, and return an MpdPlaylistSong
+    '''
+    with open(NOW_PLAYING) as now_playing:
+        song = dict(map(lambda x: x.strip().split(": "), now_playing.readlines()))
+    return mpdserver.MpdPlaylistSong(file=song['file'],
+                                     title=song['title'],
+                                     artist=song['artist'],
+                                     album=song['album'],
+                                     playlistPosition=0,
+                                     songId=0,
+                                    )
 
 class Play(mpdserver.Play):
     def handle_args(self, *args, **kwargs):

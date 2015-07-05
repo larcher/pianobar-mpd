@@ -3,6 +3,7 @@
 import mpdserver
 import time
 from mpdserver import OptStr,OptInt
+
 PORT = 6605
 FIFO = "/home/larcher/.config/pianobar/ctl"
 
@@ -55,7 +56,7 @@ class MpdPlaylist(mpdserver.MpdPlaylist):
     # How to get song position from a song id in your playlist
     def songIdToPosition(self,i):
         for e in self.playlist:
-            if e.id==i: 
+            if e.id==i:
                 return e.playlistPosition
 
     # Set your playlist. It must be a list a MpdPlaylistSong
@@ -72,15 +73,20 @@ mpd = mpdserver.MpdServerDaemon(PORT)
 # Set the user defined playlist class
 mpd.requestHandler.Playlist = MpdPlaylist
 
-# Register provided outputs command 
+# Register provided outputs command
 mpd.requestHandler.RegisterCommand(mpdserver.Outputs)
 
 # Register your own command implementation
-mpd.requestHandler.RegisterCommand(Play)
-mpd.requestHandler.RegisterCommand(Next)
-mpd.requestHandler.RegisterCommand(Stop)
-mpd.requestHandler.RegisterCommand(Pause)
-
+commands = [Play,
+            Next,
+            Stop,
+            Pause,
+            CurrentSong,
+            Status,
+            ListPlaylistInfo,
+           ]
+for command in commands:
+    mpd.requestHandler.RegisterCommand(command)
 
 print """Starting a mpd server on port %(port)s
 Type Ctrl+C to exit
@@ -92,7 +98,7 @@ Or launch a MPD client with port %(port)s
 
 if __name__ == "__main__":
     try:
-        while mpd.wait(1): 
+        while mpd.wait(1):
             pass
     except KeyboardInterrupt:
         print "Stopping MPD server"

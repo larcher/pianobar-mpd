@@ -59,6 +59,10 @@ class Next(mpdserver.Command):
     def handle_args(self):
         send_to_pianobar("n")
 
+class Status(mpdserver.Status):
+    def items(self):
+        return self.helper_status_play()
+
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.
 class MpdPlaylist(mpdserver.MpdPlaylist):
@@ -69,6 +73,7 @@ class MpdPlaylist(mpdserver.MpdPlaylist):
                                         songId=0
                                        )
              ]
+
     # How to get song position from a song id in your playlist
     def songIdToPosition(self,i):
         for e in self.playlist:

@@ -63,6 +63,10 @@ class Status(mpdserver.Status):
     def items(self):
         return self.helper_status_play()
 
+class CommandPlaylist(mpdserver.CommandPlaylist):
+    def songs(self):
+        return self.playlist.generateMpdPlaylist()
+
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.
 class MpdPlaylist(mpdserver.MpdPlaylist):

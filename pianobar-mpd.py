@@ -7,6 +7,7 @@ from mpdserver import OptStr,OptInt
 PORT = 6605
 FIFO = "/home/larcher/.config/pianobar/ctl"
 NOW_PLAYING = "/home/larcher/.config/pianobar/nowplaying-mpd"
+STATION_LIST = "/home/larcher/.config/pianobar/stationlist"
 
 def send_to_pianobar(key):
         with open(FIFO,"w") as pbctl:
@@ -62,6 +63,12 @@ class Next(mpdserver.Command):
 class Status(mpdserver.Status):
     def items(self):
         return self.helper_status_play()
+
+class ListPlaylistInfo(CommandPlaylist):
+    def items(self):
+        with open(STATION_LIST) as np:
+            playlists = map(lambda x: x.strip(), np.readlines())
+        return [('playlist', x) for x in playlists]
 
 class CommandPlaylist(mpdserver.CommandPlaylist):
     def songs(self):

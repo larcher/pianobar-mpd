@@ -9,6 +9,8 @@ FIFO = "/home/larcher/.config/pianobar/ctl"
 NOW_PLAYING = "/home/larcher/.config/pianobar/nowplaying-mpd"
 STATION_LIST = "/home/larcher/.config/pianobar/stationlist"
 
+##########
+
 def send_to_pianobar(key):
         with open(FIFO,"w") as pbctl:
             pbctl.write("\n" + key + "\n")
@@ -28,6 +30,14 @@ def get_current_song():
                                      playlistPosition=0,
                                      songId=0,
                                     )
+
+##########
+
+class CommandPlaylist(mpdserver.CommandPlaylist):
+    def songs(self):
+        return self.playlist.generateMpdPlaylist()
+
+##########
 
 class Play(mpdserver.Play):
     def handle_args(self, *args, **kwargs):
@@ -70,9 +80,6 @@ class ListPlaylistInfo(CommandPlaylist):
             playlists = map(lambda x: x.strip(), np.readlines())
         return [('playlist', x) for x in playlists]
 
-class CommandPlaylist(mpdserver.CommandPlaylist):
-    def songs(self):
-        return self.playlist.generateMpdPlaylist()
 
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.

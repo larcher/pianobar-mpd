@@ -16,7 +16,7 @@ def send_to_pianobar(key):
 
 def get_current_song():
     '''
-    Read the NOW_PLAYING file updated by pianobard, 
+    Read the NOW_PLAYING file updated by pianobard,
     parse it, and return an MpdPlaylistSong
     '''
     with open(NOW_PLAYING) as now_playing:

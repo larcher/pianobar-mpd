@@ -119,8 +119,9 @@ class Load(mpdserver.Load):
         send_to_pianobar("s%s" % playlist_num)
 
 class CurrentSong(mpdserver.CurrentSong):
-    # TODO implement currentsong
-    pass
+    def songs(self):
+        # should return a list of MpdPlaylistSong's
+        return [get_current_song()]
 
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.

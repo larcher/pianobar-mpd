@@ -92,6 +92,18 @@ class Lsinfo(ListPlaylists):
     # that command's class
     pass
 
+class Load(mpdserver.Load):
+    '''
+    load a playlist - normally by adding it to the current playlist
+    For pianobar, we'll just switch to that station
+    '''
+    def handle_args(self, playlistName):
+        # pianobar's station list precedes each station with a number and a
+        # ")".  we return that list as-is in ListPlaylists (and LsInfo), so
+        # that's what a client will send back to us in a 'load' command.  
+        # Here, we grab the number and use it to switch stations in pianobar.
+        playlist_num = playlistName[:playlistName.find(')')]
+        send_to_pianobar("s%s" % playlist_num)
 
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.
@@ -134,6 +146,7 @@ commands = [Play,
             Pause,
             CurrentSong,
             Status,
+            Load,
             ListPlaylists,
             Lsinfo,
            ]

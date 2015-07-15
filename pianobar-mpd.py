@@ -65,6 +65,13 @@ class Pause(mpdserver.Pause):
         print "unpausing"
         send_to_pianobar("p")
 
+class PlaylistId(mpdserver.PlaylistId):
+    # TODO implement PlaylistId
+    pass
+
+class PlayId(mpdserver.PlayId):
+    # TODO implement PlayId
+    pass
 
 class Next(mpdserver.Command):
     def handle_args(self):
@@ -72,7 +79,13 @@ class Next(mpdserver.Command):
 
 class Status(mpdserver.Status):
     def items(self):
+        # TODO track volume, pass it to helper_status_* so clients can see it
+        # TODO track pianobar's play state and call the right helper_status_
         return self.helper_status_play()
+
+class SetVol(mpdserver.SetVol):
+    # TODO implement volume setting!
+    pass
 
 class ListPlaylistInfo(mpdserver.ListPlaylistInfo):
     # TODO list the contents of the given playlist - not sure this will work for pianobar
@@ -104,6 +117,10 @@ class Load(mpdserver.Load):
         # Here, we grab the number and use it to switch stations in pianobar.
         playlist_num = playlistName[:playlistName.find(')')]
         send_to_pianobar("s%s" % playlist_num)
+
+class CurrentSong(mpdserver.CurrentSong):
+    # TODO implement currentsong
+    pass
 
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.
@@ -144,10 +161,12 @@ commands = [Play,
             Next,
             Stop,
             Pause,
+            PlayId,
+            PlaylistId,
             CurrentSong,
             Status,
-            Load,
             ListPlaylists,
+            Load,
             LsInfo,
            ]
 for command in commands:

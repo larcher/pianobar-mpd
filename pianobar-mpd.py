@@ -80,6 +80,20 @@ class ListPlaylistInfo(CommandPlaylist):
             playlists = map(lambda x: x.strip(), np.readlines())
         return [('playlist', x) for x in playlists]
 
+class ListPlaylists(mpdserver.ListPlaylists):
+    def handle_playlists(self):
+        with open(STATION_LIST) as sl:
+            playlists = map(lambda x: x.strip(), sl.readlines())
+        return playlists
+
+class Lsinfo(ListPlaylists):
+    #
+    # The lsinfo command is deprecated, but some clients still use it.  
+    # mpd docs say to use 'listplaylists' instead 
+    # ( http://www.musicpd.org/doc/protocol/database.html ), so we'll just use
+    # that command's class
+    pass
+
 
 # Define a MpdPlaylist based on mpdserver.MpdPlaylist
 # This class permits to generate adapted mpd respond on playlist command.
@@ -123,6 +137,8 @@ commands = [Play,
             CurrentSong,
             Status,
             ListPlaylistInfo,
+            ListPlaylists,
+            Lsinfo,
            ]
 for command in commands:
     mpd.requestHandler.RegisterCommand(command)

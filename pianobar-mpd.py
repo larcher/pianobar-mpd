@@ -84,10 +84,10 @@ class ListPlaylists(mpdserver.ListPlaylists):
             playlists = map(lambda x: x.strip(), sl.readlines())
         return playlists
 
-class Lsinfo(ListPlaylists):
+class LsInfo(ListPlaylists):
     #
-    # The lsinfo command is deprecated, but some clients still use it.  
-    # mpd docs say to use 'listplaylists' instead 
+    # The lsinfo command is deprecated, but some clients still use it.
+    # mpd docs say to use 'listplaylists' instead
     # ( http://www.musicpd.org/doc/protocol/database.html ), so we'll just use
     # that command's class
     pass
@@ -100,7 +100,7 @@ class Load(mpdserver.Load):
     def handle_args(self, playlistName):
         # pianobar's station list precedes each station with a number and a
         # ")".  we return that list as-is in ListPlaylists (and LsInfo), so
-        # that's what a client will send back to us in a 'load' command.  
+        # that's what a client will send back to us in a 'load' command.
         # Here, we grab the number and use it to switch stations in pianobar.
         playlist_num = playlistName[:playlistName.find(')')]
         send_to_pianobar("s%s" % playlist_num)
@@ -130,7 +130,7 @@ class MpdPlaylist(mpdserver.MpdPlaylist):
     def move(self,i,j):
         self.playlist[i],self.playlist[j]=self.playlist[j],self.playlist[i]
 
-# Create a deamonized mpd server that listen on port 9999
+# Create an mpd server
 mpd = mpdserver.MpdServerDaemon(PORT)
 
 # Set the user defined playlist class
@@ -148,7 +148,7 @@ commands = [Play,
             Status,
             Load,
             ListPlaylists,
-            Lsinfo,
+            LsInfo,
            ]
 for command in commands:
     mpd.requestHandler.RegisterCommand(command)

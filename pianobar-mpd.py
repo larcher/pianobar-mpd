@@ -74,11 +74,9 @@ class Status(mpdserver.Status):
     def items(self):
         return self.helper_status_play()
 
-class ListPlaylistInfo(CommandPlaylist):
-    def items(self):
-        with open(STATION_LIST) as np:
-            playlists = map(lambda x: x.strip(), np.readlines())
-        return [('playlist', x) for x in playlists]
+class ListPlaylistInfo(mpdserver.ListPlaylistInfo):
+    # TODO list the contents of the given playlist - not sure this will work for pianobar
+    pass
 
 class ListPlaylists(mpdserver.ListPlaylists):
     def handle_playlists(self):
@@ -136,7 +134,6 @@ commands = [Play,
             Pause,
             CurrentSong,
             Status,
-            ListPlaylistInfo,
             ListPlaylists,
             Lsinfo,
            ]
